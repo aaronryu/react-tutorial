@@ -1,12 +1,16 @@
 import '@/App.css'
 
+function ListItem({ children = undefined }) {
+  return <li>{children}</li>
+}
+
 function UnorderedList() {
   return (
     <ul>
       {/* li = List Item */}
-      <li>Unordered List Item 1</li>
-      <li>Unordered List Item 2</li>
-      <li>Unordered List Item 3</li>
+      <ListItem>Unordered List Item 1</ListItem>
+      <ListItem>Unordered List Item 2</ListItem>
+      <ListItem>Unordered List Item 3</ListItem>
     </ul>
   )
 }
