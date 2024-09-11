@@ -4,23 +4,23 @@ function ListItem({ children = undefined }) {
   return <li>{children}</li>
 }
 
-function UnorderedList() {
+function UnorderedList({ items }) {
   return (
     <ul>
-      {/* li = List Item */}
-      <ListItem>Unordered List Item 1</ListItem>
-      <ListItem>Unordered List Item 2</ListItem>
-      <ListItem>Unordered List Item 3</ListItem>
+      {items.map((item, index) => (
+        <ListItem key={index}>{item}</ListItem>
+      ))}
     </ul>
   )
 }
 
 function App() {
+  const items = ['Unordered List Item 1', 'Unordered List Item 2', 'Unordered List Item 3']
   return (
     <>
       <div>
         {/* ul = Unordered List */}
-        <UnorderedList />
+        <UnorderedList items={items} />
         {/* ol = Ordered List */}
         <ol>
           {/* li = List Item */}
