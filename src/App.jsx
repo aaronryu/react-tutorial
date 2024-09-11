@@ -1,16 +1,22 @@
 import '@/App.css'
 
+function UnorderedList() {
+  return (
+    <ul>
+      {/* li = List Item */}
+      <li>Unordered List Item 1</li>
+      <li>Unordered List Item 2</li>
+      <li>Unordered List Item 3</li>
+    </ul>
+  )
+}
+
 function App() {
   return (
     <>
       <div>
         {/* ul = Unordered List */}
-        <ul>
-          {/* li = List Item */}
-          <li>Unordered List Item 1</li>
-          <li>Unordered List Item 2</li>
-          <li>Unordered List Item 3</li>
-        </ul>
+        <UnorderedList />
         {/* ol = Ordered List */}
         <ol>
           {/* li = List Item */}
