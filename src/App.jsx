@@ -1,27 +1,38 @@
 import { useRef, useState } from 'react'
 import '@/App.css'
 
-function App() {
+function FormWithValidation({ label, required = false, length = undefined }) {
   const nameRef = useRef()
 
   const [requiredValid, setRequiredValid] = useState(true)
   const [lengthValid, setLengthValid] = useState(true)
 
-  console.log('- rerendered')
+  console.log('- rerendered : ' + label)
   return (
     <>
       <div>
-        이름 :{' '}
+        {label} :{' '}
         <input
           ref={nameRef}
           onChange={(e) => {
-            setRequiredValid(e.currentTarget.value.length !== 0)
-            setLengthValid(e.currentTarget.value.length <= 10)
+            if (required) setRequiredValid(e.currentTarget.value.length !== 0)
+            if (length) setLengthValid(e.currentTarget.value.length <= length)
           }}
         />
       </div>
-      {lengthValid || <div style={{ color: 'red' }}>이름의 길이는 10를 넘어선 안됩니다.</div>}
-      {requiredValid || <div style={{ color: 'red' }}>이름은 필수 입력값입니다.</div>}
+      {lengthValid || <div style={{ color: 'red' }}>{label}의 길이는 10를 넘어선 안됩니다.</div>}
+      {requiredValid || <div style={{ color: 'red' }}>{label}은 필수 입력값입니다.</div>}
+    </>
+  )
+}
+
+function App() {
+  console.log('- rerendered')
+  return (
+    <>
+      <FormWithValidation label='이름' required />
+      <FormWithValidation label='설명' length={10} />
+      <FormWithValidation label='메일' required />
     </>
   )
 }
