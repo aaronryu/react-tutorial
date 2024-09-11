@@ -13,8 +13,22 @@ function ListItem({ name, age, desc, setDesc }) {
             onClick={(e) => e.stopPropagation()}
             onChange={(e) => setDesc(e.currentTarget.value)}
           />
-          <button onClick={(e) => setActivate((previous) => !previous)}>확인</button>
-          <button onClick={(e) => setActivate((previous) => !previous)}>취소</button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setActivate((previous) => !previous)
+            }}
+          >
+            확인
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              setActivate((previous) => !previous)
+            }}
+          >
+            취소
+          </button>
         </>
       ) : (
         <span>{desc}</span>
