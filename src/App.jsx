@@ -1,29 +1,27 @@
-import { useState } from 'react'
-import reactLogo from '@/assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useRef, useState } from 'react'
 import '@/App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const nameRef = useRef()
 
+  const [requiredValid, setRequiredValid] = useState(true)
+  const [lengthValid, setLengthValid] = useState(true)
+
+  console.log('- rerendered')
   return (
     <>
       <div>
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
+        이름 :{' '}
+        <input
+          ref={nameRef}
+          onChange={(e) => {
+            setRequiredValid(e.currentTarget.value.length !== 0)
+            setLengthValid(e.currentTarget.value.length <= 10)
+          }}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
+      {lengthValid || <div style={{ color: 'red' }}>이름의 길이는 10를 넘어선 안됩니다.</div>}
+      {requiredValid || <div style={{ color: 'red' }}>이름은 필수 입력값입니다.</div>}
     </>
   )
 }
