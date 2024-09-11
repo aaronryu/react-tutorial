@@ -9,6 +9,16 @@ function App() {
   const [valid, setValid] = useState(false)
   const [entrance, setEntrance] = useState(FEE_NON_ADULT)
 
+  function setCalculate(input) {
+    if (input >= 19) {
+      setValid(true)
+      setEntrance(FEE_ADULT)
+    } else {
+      setValid(false)
+      setEntrance(FEE_NON_ADULT)
+    }
+  }
+
   return (
     <>
       <input
@@ -16,10 +26,12 @@ function App() {
         value={age}
         onChange={(event) => {
           const changed = Number(event.currentTarget.value)
-          setAge(changed)
-          setValid(changed >= 19)
+          // setAge(changed)
+          // setValid(changed >= 19)
           // 성년이 되어도 15000원이 되지 않습니다. 여러분들이 각자 한번 풀어보세요.
-          setEntrance(valid ? FEE_ADULT : FEE_NON_ADULT)
+          // setEntrance(valid ? FEE_ADULT : FEE_NON_ADULT)
+          setAge(changed)
+          setCalculate(changed)
         }}
       />
       {valid ? <div>성년입니다.</div> : <div style={{ color: 'red' }}>미성년입니다.</div>}
