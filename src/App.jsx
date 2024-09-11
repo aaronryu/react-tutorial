@@ -27,6 +27,7 @@ function ListItem({ name, age, desc, setDesc }) {
             onClick={(e) => {
               e.stopPropagation()
               setActivate((previous) => !previous)
+              setInput(desc)
             }}
           >
             취소
