@@ -3,20 +3,22 @@ import { useState } from 'react'
 
 function ListItem({ name, age, desc, setDesc }) {
   const [activated, setActivate] = useState(false)
+  const [input, setInput] = useState(desc)
   return (
     <li style={{ textAlign: 'left' }} onClick={(e) => setActivate((previous) => !previous)}>
       {name} | {age} |{' '}
       {activated ? (
         <>
           <input
-            value={desc}
+            value={input}
             onClick={(e) => e.stopPropagation()}
-            onChange={(e) => setDesc(e.currentTarget.value)}
+            onChange={(e) => setInput(e.currentTarget.value)}
           />
           <button
             onClick={(e) => {
               e.stopPropagation()
               setActivate((previous) => !previous)
+              setDesc(input)
             }}
           >
             확인
