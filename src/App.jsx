@@ -5,7 +5,12 @@ function ListItem({ name, age, desc }) {
   const [activated, setActivate] = useState(false)
   return (
     <li style={{ textAlign: 'left' }} onClick={(e) => setActivate(!activated)}>
-      {name} | {age} | {activated ? <input value={desc} /> : <span>{desc}</span>}
+      {name} | {age} |{' '}
+      {activated ? (
+        <input value={desc} onClick={(e) => e.stopPropagation()} />
+      ) : (
+        <span>{desc}</span>
+      )}
     </li>
   )
 }
