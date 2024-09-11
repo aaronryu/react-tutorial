@@ -1,9 +1,7 @@
 import { useRef, useState } from 'react'
 import '@/App.css'
 
-function FormWithValidation({ label, required = false, length = undefined }) {
-  const nameRef = useRef()
-
+function FormWithValidation({ label, required = false, length = undefined }, ref) {
   const [requiredValid, setRequiredValid] = useState(true)
   const [lengthValid, setLengthValid] = useState(true)
 
@@ -13,7 +11,7 @@ function FormWithValidation({ label, required = false, length = undefined }) {
       <div>
         {label} :{' '}
         <input
-          ref={nameRef}
+          ref={ref}
           onChange={(e) => {
             if (required) setRequiredValid(e.currentTarget.value.length !== 0)
             if (length) setLengthValid(e.currentTarget.value.length <= length)
@@ -27,12 +25,27 @@ function FormWithValidation({ label, required = false, length = undefined }) {
 }
 
 function App() {
+  const references = {
+    name: useRef(),
+    desc: useRef(),
+    mail: useRef(),
+  }
+
+  function submit() {
+    console.log({
+      name: references?.name?.current?.value,
+      desc: references?.desc?.current?.value,
+      mail: references?.mail?.current?.value,
+    })
+  }
+
   console.log('- rerendered')
   return (
     <>
-      <FormWithValidation label='이름' required />
-      <FormWithValidation label='설명' length={10} />
-      <FormWithValidation label='메일' required />
+      <FormWithValidation ref={references.name} label='이름' required />
+      <FormWithValidation ref={references.desc} label='설명' length={10} />
+      <FormWithValidation ref={references.mail} label='메일' required />
+      <button onClick={submit}>제출</button>
     </>
   )
 }
