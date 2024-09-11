@@ -1,10 +1,13 @@
 import { forwardRef, useRef, useState } from 'react'
 import '@/App.css'
 
-const FormWithValidation = forwardRef(({ label, required = false, length = undefined }, ref) => {
+const FormWithValidation = forwardRef(function FormWithValidation(
+  { label, required = false, length = undefined },
+  ref,
+) {
   const [requiredValid, setRequiredValid] = useState(true)
   const [lengthValid, setLengthValid] = useState(true)
-
+  throw new Error('컴포넌트 내부 에러')
   console.log('- rerendered : ' + label)
   return (
     <>
@@ -23,6 +26,7 @@ const FormWithValidation = forwardRef(({ label, required = false, length = undef
     </>
   )
 })
+// FormWithValidation.displayName = 'FormWithValidation' - export default 시
 
 function App() {
   const references = {
