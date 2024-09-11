@@ -1,22 +1,15 @@
 import '@/App.css'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 function App() {
   const reference = useRef(null)
 
-  console.log('렌더링 전 : ')
-  console.log(reference.current)
-  console.log(reference.current?.innerText)
-
-  useEffect(() => {
-    console.log('렌더링 후 : ')
-    console.log(reference.current)
-    console.log(reference.current.innerText)
-  }, [])
+  console.log('- rerendered')
 
   return (
     <>
       <div ref={reference}>apple</div>
+      <button onClick={(e) => (reference.current.style.color = 'red')}>변경</button>
     </>
   )
 }
