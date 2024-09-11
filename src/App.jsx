@@ -1,21 +1,30 @@
 import '@/App.css'
 
-function ListItem({ children = undefined }) {
-  return <li>{children}</li>
+function ListItem({ name, age, desc }) {
+  return (
+    <li style={{ textAlign: 'left' }}>
+      {name} | {age} | {desc}
+    </li>
+  )
 }
 
 function UnorderedList({ items }) {
   return (
     <ul>
       {items.map((item, index) => (
-        <ListItem key={index}>{item}</ListItem>
+        <ListItem key={index} name={item.name} age={item.age} desc={item.desc} />
       ))}
     </ul>
   )
 }
 
 function App() {
-  const items = ['Unordered List Item 1', 'Unordered List Item 2', 'Unordered List Item 3']
+  const items = [
+    { name: 'Aaron', age: 10, desc: '안녕하세요' },
+    { name: 'Baron', age: 30, desc: '반갑습니다' },
+    { name: 'Caron', age: 22, desc: '처음뵙겠습니다' },
+    { name: 'Daron', age: 17, desc: '보고싶었습니다' },
+  ]
   return (
     <>
       <div>
