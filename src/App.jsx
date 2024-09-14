@@ -2,10 +2,13 @@ import { useRef, useState } from 'react'
 import '@/App.css'
 import { produce } from 'immer'
 
-function UsernameInput({ reference }) {
+function UsernameInput({ reference, error, validate }) {
   return (
     <div>
-      Username : <input ref={reference} />
+      Username : <input ref={reference} onChange={(e) => validate(e.target.value)} />
+      <div style={{ color: 'red' }}>{error.maximum}</div>
+      <div style={{ color: 'red' }}>{error.minimum}</div>
+      <div style={{ color: 'red' }}>{error.required}</div>
     </div>
   )
 }
@@ -52,15 +55,15 @@ function useSingularForm() {
   }
 
   const error = {}
-  if (valid.maximum === false) error.maximum = '비밀번호는 10글자를 넘을 수 없습니다.'
-  if (valid.minimum === false) error.minimum = '비밀번호는 5글자를 넘어야합니다.'
-  if (valid.required === false) error.required = '비밀번호를 입력해주세요.'
+  if (valid.maximum === false) error.maximum = '해당 입력값은 10글자를 넘을 수 없습니다.'
+  if (valid.minimum === false) error.minimum = '해당 입력값은 5글자를 넘어야합니다.'
+  if (valid.required === false) error.required = '해당 입력폼을 입력해주세요.'
 
   return { ref, validate, error }
 }
 
 function App() {
-  const usernameRef = useRef(null)
+  const { ref: usernameRef, validate: usernameValidate, error: usernameError } = useSingularForm()
   const { ref: passwordRef, validate: passwordValidate, error: passwordError } = useSingularForm()
 
   function registration() {
@@ -68,13 +71,14 @@ function App() {
       username: usernameRef.current?.value,
       password: passwordRef.current?.value,
     }
+    usernameValidate(request.username)
     passwordValidate(request.password)
     console.log(request)
   }
 
   return (
     <section style={{ textAlign: 'start', width: 400 }}>
-      <UsernameInput reference={usernameRef} />
+      <UsernameInput reference={usernameRef} error={usernameError} validate={usernameValidate} />
       <PasswordInput reference={passwordRef} error={passwordError} validate={passwordValidate} />
       <button onClick={registration}>회원가입 완료</button>
     </section>
