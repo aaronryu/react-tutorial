@@ -2,21 +2,20 @@ import { useRef, useState } from 'react'
 import '@/App.css'
 import { produce } from 'immer'
 
-function UsernameInput() {
+function UsernameInput({ reference }) {
   return (
     <div>
-      Username : <input />
+      Username : <input ref={reference} />
     </div>
   )
 }
 
-function PasswordInput() {
+function PasswordInput({ reference }) {
   const [valid, setValid] = useState({
     maximum: false,
     minimum: false,
     required: false,
   })
-  const reference = useRef(null)
 
   function changeMode(e) {
     if (reference.current.type === 'password') {
@@ -53,12 +52,15 @@ function PasswordInput() {
 }
 
 function App() {
+  const usernameRef = useRef(null)
+  const passwordRef = useRef(null)
+
   function registration() {}
 
   return (
     <section style={{ textAlign: 'start', width: 400 }}>
-      <UsernameInput />
-      <PasswordInput />
+      <UsernameInput reference={usernameRef} />
+      <PasswordInput reference={passwordRef} />
       <button onClick={registration}>회원가입 완료</button>
     </section>
   )
