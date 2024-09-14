@@ -23,7 +23,8 @@ function PasswordInput({ reference, valid, validate }) {
   console.log('- 매번 입력해도 rerender 미발생. 객체 프로퍼티 단위 불변성을 유지하며 리렌더 방지')
   return (
     <div>
-      Password : <input type='password' ref={reference} onChange={validate} />
+      Password :{' '}
+      <input type='password' ref={reference} onChange={(e) => validate(e.target.value)} />
       <button onClick={changeMode}>🔓 보이기</button>
       {valid.maximum || <div style={{ color: 'red' }}>비밀번호는 10글자를 넘을 수 없습니다.</div>}
       {valid.minimum || <div style={{ color: 'red' }}>비밀번호는 5글자를 넘어야합니다.</div>}
@@ -41,8 +42,7 @@ function App() {
     required: false,
   })
 
-  function passwordValidate(e) {
-    const input = e.currentTarget.value
+  function passwordValidate(input) {
     const changed = produce(passwordValid, (draft) => {
       if (passwordValid.maximum !== input.length <= 10) draft.maximum = input.length <= 10
       if (passwordValid.minimum !== input.length > 5) draft.minimum = input.length > 5
@@ -51,7 +51,14 @@ function App() {
     setPasswordValid(changed)
   }
 
-  function registration() {}
+  function registration() {
+    const request = {
+      username: usernameRef.current?.value,
+      password: passwordRef.current?.value,
+    }
+    passwordValidate(request.password)
+    console.log(request)
+  }
 
   return (
     <section style={{ textAlign: 'start', width: 400 }}>
