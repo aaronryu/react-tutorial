@@ -17,12 +17,15 @@ function UsernameInput({ reference, error = undefined, validate }) {
 
 function PasswordInput({ reference, error = undefined, validate }) {
   function changeMode(e) {
-    if (reference.current.type === 'password') {
-      reference.current.type = 'text'
-      e.currentTarget.innerText = '🔒 감추기'
-    } else if (reference.current.type === 'text') {
-      reference.current.type = 'password'
-      e.currentTarget.innerText = '🔓 보이기'
+    switch (reference.current.type) {
+      case 'password':
+        reference.current.type = 'text'
+        e.currentTarget.innerText = '🔒 감추기'
+        return
+      case 'text':
+        reference.current.type = 'password'
+        e.currentTarget.innerText = '🔓 보이기'
+        return
     }
   }
   console.log('- 매번 입력해도 rerender 미발생. 객체 프로퍼티 단위 불변성을 유지하며 리렌더 방지')
@@ -48,16 +51,17 @@ function useForm() {
     { maximum: max = undefined, minimum: min = undefined, required = undefined },
   ) {
     const ref = useRef(null)
-    const initial = {}
-    if (max) initial.maximum = false
-    if (min) initial.minimum = false
-    if (required) initial.required = false
-    const [valid, setValid] = useState(initial)
+    const [valid, setValid] = useState({
+      ...(max && { maximum: false }),
+      ...(min && { minimum: false }),
+      ...(required && { required: false }),
+    })
 
-    const criteria = {}
-    if (max) criteria.maximum = { type: 'maximum', value: max.value, message: max.message ?? '' }
-    if (min) criteria.minimum = { type: 'minimum', value: min.value, message: min.message ?? '' }
-    if (required) criteria.required = { type: 'required', message: required.message ?? '' }
+    const criteria = {
+      ...(max && { maximum: { type: 'maximum', value: max.value, message: max.message ?? '' } }),
+      ...(min && { minimum: { type: 'minimum', value: min.value, message: min.message ?? '' } }),
+      ...(required && { required: { type: 'required', message: required.message ?? '' } }),
+    }
 
     function validate(input) {
       const changed = produce(valid, (draft) => {
@@ -69,10 +73,12 @@ function useForm() {
       setValid(changed)
     }
 
-    const error = {}
-    if (max && !valid.maximum) error.maximum = { message: max.message }
-    if (min && !valid.minimum) error.minimum = { message: min.message }
-    if (required && !valid.required) error.required = { message: required.message }
+    // 2. <input> 혹은 리액트 컴포넌트에 Props 로 넘겨줄 Ref 와 State 상태 반환
+    const error = {
+      ...(!valid.maximum && criteria.maximum && { maximum: criteria.maximum }),
+      ...(!valid.minimum && criteria.minimum && { minimum: criteria.minimum }),
+      ...(!valid.required && criteria.required && { required: criteria.required }),
+    }
 
     // 1. useForm 내 중앙관리 변수 form
     const form = {
@@ -95,7 +101,8 @@ function useForm() {
 
   function handleSubmit(callback) {
     const values = {}
-    for (let label of Object.keys(forms.current)) {
+
+    for (let label in forms.current) {
       const value = forms.current[label].ref.current?.value
       forms.current[label].validate(value)
       values[label] = {
