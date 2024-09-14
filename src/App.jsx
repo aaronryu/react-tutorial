@@ -7,9 +7,9 @@ function UsernameInput({ reference, error = undefined, validate }) {
     <div>
       Username : <input ref={reference} onChange={(e) => validate(e.target.value)} />
       <div style={{ color: 'red' }}>
-        {error?.maximum && <div>아이디는 최대 10글자를 넘을 수 없습니다.</div>}
-        {error?.minimum && <div>아이디는 최소 5글자를 넘어야합니다.</div>}
-        {error?.required && <div>아이디를 입력해주세요.</div>}
+        {error?.maximum ? <div>{error?.maximum?.message}</div> : <></>}
+        {error?.minimum ? <div>{error?.minimum?.message}</div> : <></>}
+        {error?.required ? <div>{error?.required?.message}</div> : <></>}
       </div>
     </div>
   )
@@ -32,9 +32,9 @@ function PasswordInput({ reference, error = undefined, validate }) {
       <input type='password' ref={reference} onChange={(e) => validate(e.target.value)} />
       <button onClick={changeMode}>🔓 보이기</button>
       <div style={{ color: 'red' }}>
-        {error?.maximum && <div>패스워드는 최대 10글자를 넘을 수 없습니다.</div>}
-        {error?.minimum && <div>패스워드는 최소 5글자를 넘어야합니다.</div>}
-        {error?.required && <div>패스워드를 입력해주세요.</div>}
+        {error?.maximum ? <div>{error?.maximum?.message}</div> : <></>}
+        {error?.minimum ? <div>{error?.minimum?.message}</div> : <></>}
+        {error?.required ? <div>{error?.required?.message}</div> : <></>}
       </div>
     </div>
   )
@@ -43,32 +43,42 @@ function PasswordInput({ reference, error = undefined, validate }) {
 function useForm() {
   const forms = useRef({})
 
-  function register(label) {
+  function register(
+    label,
+    { maximum: max = undefined, minimum: min = undefined, required = undefined },
+  ) {
     const ref = useRef(null)
-    const [valid, setValid] = useState({
-      maximum: false,
-      minimum: false,
-      required: false,
-    })
+    const initial = {}
+    if (max) initial.maximum = false
+    if (min) initial.minimum = false
+    if (required) initial.required = false
+    const [valid, setValid] = useState(initial)
+
+    const criteria = {}
+    if (max) criteria.maximum = { type: 'maximum', value: max.value, message: max.message ?? '' }
+    if (min) criteria.minimum = { type: 'minimum', value: min.value, message: min.message ?? '' }
+    if (required) criteria.required = { type: 'required', message: required.message ?? '' }
 
     function validate(input) {
       const changed = produce(valid, (draft) => {
-        if (valid.maximum !== input.length <= 10) draft.maximum = input.length <= 10
-        if (valid.minimum !== input.length > 5) draft.minimum = input.length > 5
-        if (valid.required !== input.length > 0) draft.required = input.length > 0
+        if (max && valid.maximum !== input.length <= 10) draft.maximum = input.length <= 10
+        if (min && valid.minimum !== input.length > 5) draft.minimum = input.length > 5
+        if (required && valid.required !== input.length > 0) draft.required = input.length > 0
       })
       if (!changed.maximum || !changed.minimum || !changed.required) ref.current?.focus()
       setValid(changed)
     }
 
+    const error = {}
+    if (max && !valid.maximum) error.maximum = { message: max.message }
+    if (min && !valid.minimum) error.minimum = { message: min.message }
+    if (required && !valid.required) error.required = { message: required.message }
+
     // 1. useForm 내 중앙관리 변수 form
     const form = {
       ref,
       value: ref.current?.value,
-      formState: {
-        valid: { maximum: valid.maximum, minimum: valid.minimum, required: valid.required },
-        error: { maximum: !valid.maximum, minimum: !valid.minimum, required: !valid.required },
-      },
+      formState: { error },
       validate,
     }
 
@@ -108,8 +118,19 @@ function App() {
 
   return (
     <section style={{ textAlign: 'start', width: 400 }}>
-      <UsernameInput {...register('username')} />
-      <PasswordInput {...register('password')} />
+      <UsernameInput
+        {...register('username', {
+          maximum: { value: 15, message: '아이디는 15글자를 넘을 수 없습니다.' },
+          required: { message: '아이디를 입력해주세요.' },
+        })}
+      />
+      <PasswordInput
+        {...register('password', {
+          maximum: { value: 10, message: '패스워드는 최대 10글자를 넘을 수 없습니다.' },
+          minimum: { value: 5, message: '패스워드는 최소 5글자를 넘어야합니다.' },
+          required: { message: '패스워드를 입력해주세요.' },
+        })}
+      />
       <button onClick={() => handleSubmit(registration)}>회원가입 완료</button>
     </section>
   )
