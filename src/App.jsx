@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react'
 import '@/App.css'
 
 function Header({ title }) {
@@ -9,7 +10,14 @@ function Header({ title }) {
 }
 
 function Title({ title }) {
-  return <h3>{title}</h3>
+  const titleReference = useRef(null)
+
+  useEffect(() => {
+    console.log(titleReference.current)
+    console.log(titleReference.current?.innerText)
+  }, [])
+
+  return <h3 ref={titleReference}>{title}</h3>
 }
 
 function Content({ content }) {
