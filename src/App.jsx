@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import '@/App.css'
+import { produce } from 'immer'
 
 function UsernameInput() {
   return (
@@ -26,7 +27,7 @@ function PasswordInput() {
       e.currentTarget.innerText = '🔓 보이기'
     }
   }
-  console.log('- 매번 입력할때마다 rerender 발생. 상태를 객체로 단일화하자 useRef 사용 이유를 잃음')
+  console.log('- 매번 입력해도 rerender 미발생. 객체 프로퍼티 단위 불변성을 유지하며 리렌더 방지')
   return (
     <div>
       Password :{' '}
@@ -35,11 +36,12 @@ function PasswordInput() {
         ref={reference}
         onChange={(e) => {
           const input = e.currentTarget.value
-          setValid({
-            maximum: input.length <= 10,
-            minimum: input.length > 5,
-            required: input.length > 0,
+          const changed = produce(valid, (draft) => {
+            if (valid.maximum !== input.length <= 10) draft.maximum = input.length <= 10
+            if (valid.minimum !== input.length > 5) draft.minimum = input.length > 5
+            if (valid.required !== input.length > 0) draft.required = input.length > 0
           })
+          setValid(changed)
         }}
       />
       <button onClick={changeMode}>🔓 보이기</button>
