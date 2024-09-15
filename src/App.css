@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+
+.show-header-title {
+  opacity: 1 !important;
+  transition: all 100ms ease-in;
+}
