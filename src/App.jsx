@@ -1,24 +1,32 @@
 import { useReducer, useState } from 'react'
 import '@/App.css'
 
-function 상태변경_경우의수_2개(상태, 상태변경요청) {
-  // - 상태 = 이전 상태
-  // - 상태변경요청 = 상태를 어떻게 변경할지? = { type, data }
+/**
+ * Reducer : 상태 변경 로직 모음
+ * @param {*} previousState : 이전 상태
+ * @param {*} action : 상태 변경 요청
+ * @returns
+ */
+function reducer(previousState, action) {
+  // - previousState = 이전 상태
+  // - action = 상태를 어떻게 변경할지? = { type, data }
   //    - type
   //      - 10 증가할래 : INCREASE_TEN
   //      - 10 감소할래 : DECREASE_TEN
-  switch (상태변경요청.type) {
+  switch (action.type) {
     case 'INCREASE_TEN':
-      // setState 변경 방법 2개 : (1) 값 (2) 함수 = 이 상태변경_경우의수_2개 함수는 (2)번에 해당
-      return 상태 + 10
+      // setState 변경 방법 2개 : (1) 값 (2) 함수 = 이 reducer 함수는 (2)번에 해당
+      return previousState + 10
     case 'DECREASE_TEN':
-      return 상태 - 10
+      return previousState - 10
+    default:
+      throw new Error('정의되어있지 않은 action 입니다.')
   }
 }
 
 function App() {
   // const [count, setCount] = useState(0)
-  const [count, setCount] = useReducer(상태변경_경우의수_2개, 0 /* 초기 상태 = initial state */)
+  const [count, dispatch] = useReducer(reducer, 0 /* 초기 상태 = initial state */)
   /**
    * 우리가 필요한것 = useReducer 의 2개의 파라미터
    *  - 2가지 경우의 수
@@ -31,8 +39,10 @@ function App() {
   return (
     <>
       <div>{count}</div>
-      <button onClick={() => setCount({ type: 'INCREASE_TEN' })}>증가</button>
-      <button onClick={() => setCount({ type: 'DECREASE_TEN' })}>감소</button>
+      {/* dispatch : 상태 변경 요청 호출 */}
+      {/* action   : 상태 변경 요청 */}
+      <button onClick={() => dispatch({ type: 'INCREASE_TEN' })}>증가</button>
+      <button onClick={() => dispatch({ type: 'DECREASE_TEN' })}>감소</button>
     </>
   )
 }
