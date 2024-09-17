@@ -11,7 +11,7 @@ function LC() {
 }
 
 function TC() {
-  const count = useContext(CreatedContext)
+  const { count } = useContext(CreatedContext)
   console.log('- A.3. Third Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
@@ -41,19 +41,21 @@ function FC() {
   )
 }
 
-function ButtonComponent({ onClick }) {
+function ButtonComponent() {
+  const { setCount } = useContext(CreatedContext)
   console.log('- B. Button Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
       Button Component
       <div>
-        <button onClick={onClick}>증가</button>
+        <button onClick={() => setCount((prev) => prev + 1)}>증가</button>
       </div>
     </div>
   )
 }
 
-function NonContextComponent({ count }) {
+function NonContextComponent() {
+  const { count } = useContext(CreatedContext)
   console.log('- C. Non-Context Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
@@ -64,11 +66,22 @@ function NonContextComponent({ count }) {
 
 /* 1. Context 사용하겠습니다 - 공표 */
 const defaultValue = -10
-const CreatedContext = createContext(defaultValue /* DV : default value */)
+const CreatedContext = createContext(
+  { count: defaultValue, setCount: (state) => {} } /* DV : default value */,
+)
 
-function App() {
+function CreatedContextProvider({ children }) {
   const [count, setCount] = useState(0)
 
+  return (
+    <CreatedContext.Provider value={{ count, setCount } /* IV : initial value */}>
+      {/* 2. Context.Provider 감쌀 영역 = 전역 상태를 사용할 범주 정의 */}
+      {children}
+    </CreatedContext.Provider>
+  )
+}
+
+function App() {
   return (
     <div
       className='section-box'
@@ -80,12 +93,12 @@ function App() {
         padding: 10,
       }}
     >
-      <CreatedContext.Provider value={count /* IV : initial value */}>
+      <CreatedContextProvider>
         {/* 2. Context.Provider 감쌀 영역 = 전역 상태를 사용할 범주 정의 */}
         <FC />
-        <ButtonComponent onClick={() => setCount((prev) => prev + 1)} />
-      </CreatedContext.Provider>
-      <NonContextComponent count={defaultValue} />
+        <ButtonComponent />
+      </CreatedContextProvider>
+      <NonContextComponent />
     </div>
   )
 }
