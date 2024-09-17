@@ -9,19 +9,23 @@ const THEME = {
 const ThemeContext = createContext({ theme: THEME.DEFAULT, setTheme: (state) => {} })
 
 function ThemeContextProvider({ children }) {
-  const [theme, setTheme] = useState(THEME.DEFAULT)
+  const stored = localStorage.getItem('theme')
+  const [theme, setTheme] = useState(stored ?? THEME.DEFAULT)
 
   useEffect(() => {
     if (theme === THEME.DEFAULT) {
       window.matchMedia('(prefers-color-scheme: dark)').matches
         ? document.body.classList.add('dark')
         : document.body.classList.remove('dark')
+      localStorage.setItem('theme', THEME.DEFAULT)
     }
     if (theme === THEME.DARK) {
       document.body.classList.add('dark')
+      localStorage.setItem('theme', THEME.DARK)
     }
     if (theme === THEME.LIGHT) {
       document.body.classList.remove('dark')
+      localStorage.setItem('theme', THEME.LIGHT)
     }
   }, [theme])
 
