@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
+    "lib": ["dom", "ESNext"],
     "checkJs": true,
     "baseUrl": ".",
     "paths": {
