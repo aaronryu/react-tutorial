@@ -1,30 +1,52 @@
-import { useState } from 'react'
-import reactLogo from '@/assets/react.svg'
-import viteLogo from '/vite.svg'
+import { createContext, useContext, useEffect, useState } from 'react'
 import '@/App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const THEME = {
+  DEFAULT: 'system',
+  DARK: 'dark',
+  LIGHT: 'light',
+}
+const ThemeContext = createContext({ theme: THEME.DEFAULT, setTheme: (state) => {} })
 
+function ThemeContextProvider({ children }) {
+  const [theme, setTheme] = useState(THEME.DEFAULT)
+
+  useEffect(() => {
+    if (theme === THEME.DEFAULT) {
+      window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? document.body.classList.add('dark')
+        : document.body.classList.remove('dark')
+    }
+    if (theme === THEME.DARK) {
+      document.body.classList.add('dark')
+    }
+    if (theme === THEME.LIGHT) {
+      document.body.classList.remove('dark')
+    }
+  }, [theme])
+
+  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>
+}
+
+function ThemeSelect() {
+  const { theme, setTheme } = useContext(ThemeContext)
   return (
-    <>
-      <div>
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-    </>
+    <select defaultValue={theme} onChange={(e) => setTheme(e.target.value)}>
+      {Object.values(THEME).map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+function App() {
+  return (
+    <ThemeContextProvider>
+      <h1>Theme</h1>
+      <ThemeSelect />
+    </ThemeContextProvider>
   )
 }
 

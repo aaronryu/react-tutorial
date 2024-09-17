@@ -28,6 +28,16 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  color-scheme: light;
+  background-color: rgba(255, 255, 255, 0.87);
+  color: #242424;
+}
+
+body.dark {
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 }
 
 h1 {
