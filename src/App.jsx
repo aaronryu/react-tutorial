@@ -13,8 +13,9 @@ function ThemeContextProvider({ children }) {
   const [theme, setTheme] = useState(stored ?? THEME.DEFAULT)
 
   useEffect(() => {
+    const themeMedia = window.matchMedia('(prefers-color-scheme: dark)')
     if (theme === THEME.DEFAULT) {
-      window.matchMedia('(prefers-color-scheme: dark)').matches
+      themeMedia.matches
         ? document.body.classList.add('dark')
         : document.body.classList.remove('dark')
       localStorage.setItem('theme', THEME.DEFAULT)
@@ -26,6 +27,14 @@ function ThemeContextProvider({ children }) {
     if (theme === THEME.LIGHT) {
       document.body.classList.remove('dark')
       localStorage.setItem('theme', THEME.LIGHT)
+    }
+    /* 심화 : 운영체제에서 테마를 바꾸었을때 바로 적용될 수 있도록 이벤트 부착 */
+    function handleThemeChange(e) {
+      e.matches ? document.body.classList.add('dark') : document.body.classList.remove('dark')
+    }
+    themeMedia.addEventListener('change', handleThemeChange)
+    return () => {
+      themeMedia.removeEventListener('change', handleThemeChange)
     }
   }, [theme])
 
