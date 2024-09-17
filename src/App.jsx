@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import '@/App.css'
 
 function LC() {
@@ -10,7 +10,8 @@ function LC() {
   )
 }
 
-function TC({ count }) {
+function TC() {
+  const count = useContext(CreatedContext)
   console.log('- A.3. Third Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
@@ -20,22 +21,22 @@ function TC({ count }) {
   )
 }
 
-function SC({ count }) {
+function SC() {
   console.log('- A.2. Second Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
       Second Component
-      <TC count={count} />
+      <TC />
     </div>
   )
 }
 
-function FC({ count }) {
+function FC() {
   console.log('- A.1. First Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
       First Component
-      <SC count={count} />
+      <SC />
     </div>
   )
 }
@@ -61,8 +62,13 @@ function NonContextComponent({ count }) {
   )
 }
 
+/* 1. Context 사용하겠습니다 - 공표 */
+const defaultValue = -10
+const CreatedContext = createContext(defaultValue /* DV : default value */)
+
 function App() {
   const [count, setCount] = useState(0)
+
   return (
     <div
       className='section-box'
@@ -74,9 +80,12 @@ function App() {
         padding: 10,
       }}
     >
-      <FC count={count} />
-      <ButtonComponent onClick={() => setCount((prev) => prev + 1)} />
-      <NonContextComponent count={count} />
+      <CreatedContext.Provider value={count /* IV : initial value */}>
+        {/* 2. Context.Provider 감쌀 영역 = 전역 상태를 사용할 범주 정의 */}
+        <FC />
+        <ButtonComponent onClick={() => setCount((prev) => prev + 1)} />
+      </CreatedContext.Provider>
+      <NonContextComponent count={defaultValue} />
     </div>
   )
 }
