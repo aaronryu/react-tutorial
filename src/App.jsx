@@ -11,11 +11,12 @@ function LC() {
 }
 
 function TC() {
-  const { count } = useContext(CreatedContext)
+  // const { count } = useContext(CreatedContext)
   console.log('- A.3. Third Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
-      Third Component : {count}
+      Third Component :{' '}
+      <CreatedContext.Consumer>{({ count }) => <>{count}</>}</CreatedContext.Consumer>
       <LC />
     </div>
   )
@@ -42,13 +43,15 @@ function FC() {
 }
 
 function ButtonComponent() {
-  const { setCount } = useContext(CreatedContext)
+  // const { setCount } = useContext(CreatedContext)
   console.log('- B. Button Component')
   return (
     <div className='component-box' style={{ padding: 10 }}>
       Button Component
       <div>
-        <button onClick={() => setCount((prev) => prev + 1)}>증가</button>
+        <CreatedContext.Consumer>
+          {({ setCount }) => <button onClick={() => setCount((prev) => prev + 1)}>증가</button>}
+        </CreatedContext.Consumer>
       </div>
     </div>
   )
