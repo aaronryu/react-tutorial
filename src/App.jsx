@@ -2,6 +2,16 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import '@/App.css'
 
+function Modal({ title = undefined, content = undefined, onClose }) {
+  return (
+    <dialog open>
+      <h3>{title}</h3>
+      <p>{content}</p>
+      <button onClick={(e) => onClose()}>닫기</button>
+    </dialog>
+  )
+}
+
 const ModalContext = createContext({ show: (content) => {}, close: () => {} })
 
 function ModalContextProvider({ children }) {
@@ -21,11 +31,7 @@ function ModalContextProvider({ children }) {
       {modal.open &&
         createPortal(
           // Non-modal Dialog : 외부와의 인터렉션 허용 (backdrop 미존재)
-          <dialog open>
-            <h3>{modal.title}</h3>
-            <p>{modal.content}</p>
-            <button onClick={(e) => close()}>닫기</button>
-          </dialog>,
+          <Modal title={modal.title} content={modal.content} onClose={close} />,
           document.body,
         )}
     </ModalContext.Provider>
