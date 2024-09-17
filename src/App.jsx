@@ -7,18 +7,18 @@ import '@/App.css'
  * @param {*} action : 상태 변경 요청
  * @returns
  */
-function reducer(previousState, action) {
+function reducer(previousState, action /* = { type, payload } */) {
   // - previousState = 이전 상태
-  // - action = 상태를 어떻게 변경할지? = { type, data }
+  // - action = 상태를 어떻게 변경할지? = { type, payload }
   //    - type
-  //      - 10 증가할래 : INCREASE_TEN
-  //      - 10 감소할래 : DECREASE_TEN
+  //      - 증가할래 : INCREASE
+  //      - 감소할래 : DECREASE
   switch (action.type) {
-    case 'INCREASE_TEN':
+    case 'INCREASE':
       // setState 변경 방법 2개 : (1) 값 (2) 함수 = 이 reducer 함수는 (2)번에 해당
-      return previousState + 10
-    case 'DECREASE_TEN':
-      return previousState - 10
+      return previousState + action.payload
+    case 'DECREASE':
+      return previousState - action.payload
     default:
       throw new Error('정의되어있지 않은 action 입니다.')
   }
@@ -41,8 +41,8 @@ function App() {
       <div>{count}</div>
       {/* dispatch : 상태 변경 요청 호출 */}
       {/* action   : 상태 변경 요청 */}
-      <button onClick={() => dispatch({ type: 'INCREASE_TEN' })}>증가</button>
-      <button onClick={() => dispatch({ type: 'DECREASE_TEN' })}>감소</button>
+      <button onClick={() => dispatch({ type: 'INCREASE', payload: 5 } /* action */)}>증가</button>
+      <button onClick={() => dispatch({ type: 'DECREASE', payload: 8 } /* action */)}>감소</button>
     </>
   )
 }
