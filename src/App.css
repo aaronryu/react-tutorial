@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.component-box {
+  border: 2px solid white;
+}
+
+.section-box {
+  border: 2px solid rgb(255, 224, 147);
+}
