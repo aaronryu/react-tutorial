@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import '@/App.css'
 
 const Validation = memo(function Validation({ valid }) {
@@ -6,10 +6,10 @@ const Validation = memo(function Validation({ valid }) {
   return <div>{valid ? <p>성년입니다</p> : <p style={{ color: 'red' }}>미성년입니다</p>}</div>
 })
 
-function Button({ onClick }) {
+const Button = memo(function Button({ onClick }) {
   console.log('- rerendered : Button')
   return <button onClick={onClick}>증가</button>
-}
+})
 
 function App() {
   const [age, setAge] = useState(0)
@@ -20,11 +20,15 @@ function App() {
     return age >= 19 ? true : false
   }, [age >= 19])
 
+  const increase = useCallback(() => {
+    setAge((previous) => previous + 1)
+  }, [])
+
   return (
     <>
       <p>{age}</p>
       <Validation valid={valid} />
-      <Button onClick={() => setAge(age + 1)} />
+      <Button onClick={increase} />
     </>
   )
 }
