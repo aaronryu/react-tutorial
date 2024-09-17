@@ -1,29 +1,17 @@
 import { useState } from 'react'
-import reactLogo from '@/assets/react.svg'
-import viteLogo from '/vite.svg'
 import '@/App.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
+  // 상태 변경 경우의 수 2개 : 10 증가, 10 감소 => 만약에 count 를 무조건 10씩 증가 혹은 감소만하고싶다면?
+  //  - 문제점 : setCount 는 넣는값마다 다 변경할 수 있다는 "자율성"
+  //  - 내가 원하는것 : count 상태 변경에 제약을 두가지 경우의 수로만
   return (
     <>
-      <div>
-        <a href='https://vitejs.dev' target='_blank'>
-          <img src={viteLogo} className='logo' alt='Vite logo' />
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
+      <div>{count}</div>
+      <button onClick={() => setCount((prev) => prev + 10)}>증가</button>
+      <button onClick={() => setCount((prev) => prev - 10)}>감소</button>
     </>
   )
 }
