@@ -1,39 +1,51 @@
 import { createContext, useContext, useState } from 'react'
 import '@/App.css'
 
-const ModalContext = createContext({ show: () => {}, close: () => {} })
+const ModalContext = createContext({ show: (content) => {}, close: () => {} })
 
 function ModalContextProvider({ children }) {
-  const [open, setOpen] = useState(false)
+  const [modal, setModal] = useState({ open: false, content: <></> })
 
-  function show() {
-    setOpen(true)
+  function show(content) {
+    setModal({ open: true, content })
   }
 
   function close() {
-    setOpen(false)
+    setModal({ open: false, content: <></> })
   }
 
   return (
     <ModalContext.Provider value={{ show, close }}>
       {children}
-      <dialog open={open}>
-        <h3>Modal</h3>
+      <dialog open={modal.open}>
+        {modal.content}
         <button onClick={(e) => close()}>닫기</button>
       </dialog>
     </ModalContext.Provider>
   )
 }
 
-function ModalButton() {
+function Modal1Button() {
   const { show } = useContext(ModalContext)
-  return <button onClick={(e) => show()}>열기</button>
+  return <button onClick={(e) => show(<h3>Modal 1</h3>)}>1 열기</button>
+}
+
+function Modal2Button() {
+  const { show } = useContext(ModalContext)
+  return <button onClick={(e) => show(<h3>Modal 2</h3>)}>2 열기</button>
+}
+
+function Modal3Button() {
+  const { show } = useContext(ModalContext)
+  return <button onClick={(e) => show(<h3>Modal 3</h3>)}>3 열기</button>
 }
 
 function App() {
   return (
     <ModalContextProvider>
-      <ModalButton />
+      <Modal1Button />
+      <Modal2Button />
+      <Modal3Button />
     </ModalContextProvider>
   )
 }
