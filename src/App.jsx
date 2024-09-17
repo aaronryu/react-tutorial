@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useReducer, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import '@/App.css'
 
@@ -28,16 +28,34 @@ function Modal({ type = 'info', title = undefined, content = undefined, onClose 
 
 const ModalContext = createContext({ show: (content) => {}, close: () => {} })
 
+/**
+ *
+ * @param {*} previousState
+ * @param {*} action
+ * @returns
+ */
+function reducer(previousState, action /* 타입(뭘 수행할지) + 페이로드(유저가 전달한 파라미터) */) {
+  switch (action.type.toUpperCase()) {
+    default:
+      return {
+        open: action.open,
+        type: action.type,
+        title: action.title,
+        content: action.content,
+      }
+  }
+}
+
 function ModalContextProvider({ children }) {
   const CLOSED = { open: false, type: 'info', title: undefined, content: undefined }
-  const [modal, setModal] = useState(CLOSED)
+  const [modal, dispatch] = useReducer(reducer, CLOSED)
 
   function show({ type, title, content }) {
-    setModal({ open: true, type, title, content })
+    dispatch({ open: true, type, title, content })
   }
 
   function close() {
-    setModal(CLOSED)
+    dispatch(CLOSED)
   }
 
   return (
