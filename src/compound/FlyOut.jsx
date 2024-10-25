@@ -26,6 +26,17 @@ function Toggle() {
   )
 }
 
+function List({ children }) {
+  const { open } = useContext(FlyOutContext)
+  return open && <ul>{children}</ul>
+}
+
+function Item({ children }) {
+  return <li>{children}</li>
+}
+
 FlyOut.Toggle = Toggle
+FlyOut.List = List
+FlyOut.Item = Item
 
 export default FlyOut
