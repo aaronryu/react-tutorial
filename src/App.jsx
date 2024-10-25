@@ -1,10 +1,10 @@
 import '@/App.css'
-import FlyoutMenu from '@/compound/FlyoutMenu'
+import ImageList from '@/compound/ImageList'
 
 function App() {
   return (
     <>
-      <FlyoutMenu />
+      <ImageList />
     </>
   )
 }

@@ -1,4 +1,5 @@
 import FlyOut from '@/compound/FlyOut'
+import '@/compound/flyout.css'
 
 export default function FlyoutMenu() {
   return (

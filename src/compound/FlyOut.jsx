@@ -10,9 +10,11 @@ function FlyOut(props) {
   const [open, toggle] = useState(false)
 
   return (
-    <FlyOutContext.Provider value={{ open, toggle }}>
-      {props.children}
-    </FlyOutContext.Provider>
+    <div className='flyout'>
+      <FlyOutContext.Provider value={{ open, toggle }}>
+        {props.children}
+      </FlyOutContext.Provider>
+    </div>
   )
 }
 
@@ -20,7 +22,7 @@ function Toggle() {
   const { open, toggle } = useContext(FlyOutContext)
 
   return (
-    <div onClick={() => toggle(!open)}>
+    <div className='flyout-btn' onClick={() => toggle(!open)}>
       <Icon />
     </div>
   )
@@ -28,11 +30,11 @@ function Toggle() {
 
 function List({ children }) {
   const { open } = useContext(FlyOutContext)
-  return open && <ul>{children}</ul>
+  return open && <ul className='flyout-list'>{children}</ul>
 }
 
 function Item({ children }) {
-  return <li>{children}</li>
+  return <li className='flyout-item'>{children}</li>
 }
 
 FlyOut.Toggle = Toggle
