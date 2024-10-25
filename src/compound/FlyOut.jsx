@@ -1,4 +1,5 @@
-import { createContext, useState } from 'react'
+import Icon from '@/compound/Icon'
+import { createContext, useContext, useState } from 'react'
 
 const FlyOutContext = createContext({
   open: false,
@@ -14,5 +15,17 @@ function FlyOut(props) {
     </FlyOutContext.Provider>
   )
 }
+
+function Toggle() {
+  const { open, toggle } = useContext(FlyOutContext)
+
+  return (
+    <div onClick={() => toggle(!open)}>
+      <Icon />
+    </div>
+  )
+}
+
+FlyOut.Toggle = Toggle
 
 export default FlyOut
