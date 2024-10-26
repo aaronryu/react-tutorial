@@ -1,5 +1,5 @@
 import '@/App.css'
-import { createSlice } from '@reduxjs/toolkit' // * RTK 에서 제공하는 간편 코드
+import { configureStore, createSlice } from '@reduxjs/toolkit' // * RTK 에서 제공하는 간편 코드
 
 // 1. Slice 생성 (createSlice) = Reducer + Action + (초기) State 설정
 const themeSlice = createSlice({
@@ -21,6 +21,17 @@ const themeSlice = createSlice({
         previousState.desc = '검정검정 테마'
       }
     },
+  },
+})
+
+// 2. 전역 Store 설정 (configureStore) <- Reducer(Reducer + InitialState) 넣으면 끝
+const store = configureStore({
+  reducer: {
+    // Store 내 (초기) State 뿐만 아니라 상태전이를 위한 Reducer 대입
+    theme: themeSlice.reducer,
+    // cart: cartSlice.reducer,
+    // payment: paymentSlice.reducer,
+    // account: accountSlice.reducer,
   },
 })
 
