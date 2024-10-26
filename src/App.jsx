@@ -20,38 +20,25 @@ function ThemeDescription() {
   return <div>{themeDesc}</div>
 }
 
+function dispatchWithLog(store, dispatch, action) {
+  console.log('- 이전 State : ', store.getState())
+  console.log('- Action : ', action)
+  dispatch(action)
+  console.log('- 이후 State : ', store.getState())
+}
+
 function ChangeButton() {
   // 4.2. Store 전역 상태에 대한 Setter
   const dispatch = useAppDispatch()
   console.log('Display Rerendered !')
-  return (
-    <button
-      onClick={() => {
-        const action = change()
-        console.log('- 이전 State : ', store.getState())
-        console.log('- Action : ', action)
-        dispatch(action)
-        console.log('- 이후 State : ', store.getState())
-      }}
-    >
-      변경 버튼
-    </button>
-  )
+  return <button onClick={() => dispatchWithLog(store, dispatch, change())}>변경 버튼</button>
 }
 
 function ModifyButton({ color, desc }) {
   // 4.2. Store 전역 상태에 대한 Setter
   const dispatch = useAppDispatch()
   return (
-    <button
-      onClick={() => {
-        const action = modify({ color, desc })
-        console.log('- 이전 State : ', store.getState())
-        console.log('- Action : ', action)
-        dispatch(action)
-        console.log('- 이후 State : ', store.getState())
-      }}
-    >
+    <button onClick={() => dispatchWithLog(store, dispatch, modify({ color, desc }))}>
       <span style={{ color }}>테마 변경</span>
     </button>
   )
