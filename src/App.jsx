@@ -1,5 +1,6 @@
 import '@/App.css'
 import { configureStore, createSlice } from '@reduxjs/toolkit' // * RTK 에서 제공하는 간편 코드
+import { Provider } from 'react-redux'
 
 // 1. Slice 생성 (createSlice) = Reducer + Action + (초기) State 설정
 const themeSlice = createSlice({
@@ -36,7 +37,12 @@ const store = configureStore({
 })
 
 function App() {
-  return <></>
+  return (
+    <Provider store={store}>
+      {/* 3. Provider 로 전역 상태들을 사용할 범주 설정 */}
+      <>{/* 4. 전역 상태들을 사용하는 컴포넌트 정의 */}</>
+    </Provider>
+  )
 }
 
 export default App
