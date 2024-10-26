@@ -52,6 +52,13 @@ function ThemeDescription() {
   return <div>{themeDesc}</div>
 }
 
+function ChangeButton() {
+  // 4.2. Store 전역 상태에 대한 Setter
+  const dispatch = useDispatch()
+  console.log('Display Rerendered !')
+  return <button onClick={() => dispatch(themeSlice.actions.change())}>변경 버튼</button>
+}
+
 function App() {
   return (
     <Provider store={store}>
@@ -61,6 +68,7 @@ function App() {
         {/* 4. 전역 상태들을 사용하는 컴포넌트 정의 */}
         <ThemeText />
         <ThemeDescription />
+        <ChangeButton />
       </>
     </Provider>
   )
