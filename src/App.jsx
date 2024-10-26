@@ -22,6 +22,10 @@ const themeSlice = createSlice({
         // previousState.desc = '검정검정 테마' - immer 적용에 따른 부분 렌더링 확인을 위해 주석처리
       }
     },
+    modify: (previousState, { payload, type }) => {
+      previousState.color = payload.color
+      previousState.desc = payload.desc
+    },
   },
 })
 
@@ -59,6 +63,16 @@ function ChangeButton() {
   return <button onClick={() => dispatch(themeSlice.actions.change())}>변경 버튼</button>
 }
 
+function ModifyButton({ color, desc }) {
+  // 4.2. Store 전역 상태에 대한 Setter
+  const dispatch = useDispatch()
+  return (
+    <button onClick={() => dispatch(themeSlice.actions.modify({ color, desc }))}>
+      <span style={{ color }}>테마 변경</span>
+    </button>
+  )
+}
+
 function App() {
   return (
     <Provider store={store}>
@@ -69,6 +83,8 @@ function App() {
         <ThemeText />
         <ThemeDescription />
         <ChangeButton />
+        <ModifyButton color='red' desc='빨강빨강 테마' />
+        <ModifyButton color='green' desc='초롱초롱 테마' />
       </>
     </Provider>
   )
