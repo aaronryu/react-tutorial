@@ -1,6 +1,5 @@
 import '@/App.css'
 import { useAppDispatch, useAppSelector } from '@/app/hook'
-import { store } from '@/app/store'
 import { change, modify } from '@/features/theme/slice'
 import { ReduxProvider } from '@/providers/ReduxProvider'
 
@@ -20,25 +19,18 @@ function ThemeDescription() {
   return <div>{themeDesc}</div>
 }
 
-const dispatchWithLog = (store) => (next) => (action) => {
-  console.log('- 이전 State : ', store.getState())
-  console.log('- Action : ', action)
-  next(action)
-  console.log('- 이후 State : ', store.getState())
-}
-
 function ChangeButton() {
   // 4.2. Store 전역 상태에 대한 Setter
   const dispatch = useAppDispatch()
   console.log('Display Rerendered !')
-  return <button onClick={() => dispatchWithLog(store)(dispatch)(change())}>변경 버튼</button>
+  return <button onClick={() => dispatch(change())}>변경 버튼</button>
 }
 
 function ModifyButton({ color, desc }) {
   // 4.2. Store 전역 상태에 대한 Setter
   const dispatch = useAppDispatch()
   return (
-    <button onClick={() => dispatchWithLog(store)(dispatch)(modify({ color, desc }))}>
+    <button onClick={() => dispatch(modify({ color, desc }))}>
       <span style={{ color }}>테마 변경</span>
     </button>
   )

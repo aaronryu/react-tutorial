@@ -1,7 +1,14 @@
 import themeReducer from '@/features/theme/slice'
-import { configureStore } from '@reduxjs/toolkit' // * RTK 에서 제공하는 간편 코드
+import { configureStore } from '@reduxjs/toolkit'
 
-// 2. 전역 Store 설정 (configureStore) <- Reducer(Reducer + InitialState) 넣으면 끝
+const dispatchWithLog = (store) => (next) => (action) => {
+  console.log('- 이전 State : ', store.getState())
+  console.log('- Action : ', action)
+  next(action)
+  console.log('- 이후 State : ', store.getState())
+}
+
+// 2. 전역 Store 설정 (configureStore) <- Reducer(Reducer + InitialState) + Middleware
 export const store = configureStore({
   reducer: {
     // Store 내 (초기) State 뿐만 아니라 상태전이를 위한 Reducer 대입
@@ -10,4 +17,5 @@ export const store = configureStore({
     // payment: paymentSlice.reducer,
     // account: accountSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(dispatchWithLog),
 })
