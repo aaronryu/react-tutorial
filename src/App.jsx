@@ -1,6 +1,6 @@
 import '@/App.css'
 import { configureStore, createSlice } from '@reduxjs/toolkit' // * RTK 에서 제공하는 간편 코드
-import { Provider } from 'react-redux'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 
 // 1. Slice 생성 (createSlice) = Reducer + Action + (초기) State 설정
 const themeSlice = createSlice({
@@ -36,11 +36,32 @@ const store = configureStore({
   },
 })
 
+function ThemeText() {
+  // 4.1. Store 전역 상태에 대한 Getter
+  const themeColor = useSelector((state) => state['theme'].color)
+  // + immer 덕분에 color 값만 바뀌었을때 리렌더된다
+  console.log("Theme'Text' Rerendered !")
+  return <div style={{ color: themeColor }}>Hello, World!</div>
+}
+
+function ThemeDescription() {
+  // 4.1. Store 전역 상태에 대한 Getter
+  const themeDesc = useSelector((state) => state['theme'].desc)
+  // + immer 덕분에 color 값만 바뀌었을때 리렌더된다
+  console.log("Theme'Description' Rerendered !")
+  return <div>{themeDesc}</div>
+}
+
 function App() {
   return (
     <Provider store={store}>
       {/* 3. Provider 로 전역 상태들을 사용할 범주 설정 */}
-      <>{/* 4. 전역 상태들을 사용하는 컴포넌트 정의 */}</>
+      <>
+        <h2>테마 바꾸기 Context API 예제</h2>
+        {/* 4. 전역 상태들을 사용하는 컴포넌트 정의 */}
+        <ThemeText />
+        <ThemeDescription />
+      </>
     </Provider>
   )
 }
