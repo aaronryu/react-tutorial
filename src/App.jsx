@@ -15,11 +15,11 @@ const themeSlice = createSlice({
       if (previousState.color === 'black') {
         // return { color: 'white', desc: '하얀하얀 테마' }
         previousState.color = 'white'
-        previousState.desc = '하얀하얀 테마'
+        // previousState.desc = '하얀하얀 테마' - immer 적용에 따른 부분 렌더링 확인을 위해 주석처리
       } else {
         // return { color: 'black', desc: '검정검정 테마' }
         previousState.color = 'black'
-        previousState.desc = '검정검정 테마'
+        // previousState.desc = '검정검정 테마' - immer 적용에 따른 부분 렌더링 확인을 위해 주석처리
       }
     },
   },
