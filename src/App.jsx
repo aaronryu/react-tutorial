@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/app/hook'
-import { loading, success, failed, CustomError } from '@/features/users/slice'
 import { ReduxProvider } from '@/providers/ReduxProvider'
 import './App.css'
+import { fetchUsers } from '@/features/users/slice'
 
 function UserTable() {
   const users = useAppSelector((state) => state['users'].data)
@@ -46,36 +46,19 @@ function UserFetchButton() {
   const dispatch = useAppDispatch()
   const status = useAppSelector((state) => state['users'].status)
 
-  function fetchUsers() {
+  function handleFetchUsers() {
+    // if (states.status === 'success') {
     if (status !== 'idle') {
       // 1. already fetched
       console.log("already fetched! we don't need to fetch any api")
       return
     }
-    dispatch(loading())
-    // 2. fetch
-    fetch('/api/users')
-      .then((result) => {
-        console.log('1) API 호출 결과 : ' + result)
-        if (!result.ok) {
-          throw new CustomError({ status: result.status, statusText: result.statusText })
-        }
-        return result.json()
-      })
-      .then((fetchedUsers) => {
-        console.log('2) API 호출 성공 시 유저 데이터 정상 반환 : ' + fetchedUsers)
-        // 3. setState
-        dispatch(success(fetchedUsers))
-      })
-      .catch((error) => {
-        console.log('에러 객체', error.detail)
-        console.log('3) API 호출 실패 시 에러 관련 데이터 반환 : ' + error)
-        dispatch(failed(error.detail))
-      })
+    // @ts-ignore
+    dispatch(fetchUsers())
   }
 
   return (
-    <button style={{ marginTop: 10 }} onClick={(e) => fetchUsers()}>
+    <button style={{ marginTop: 10 }} onClick={(e) => handleFetchUsers()}>
       조회하기
     </button>
   )

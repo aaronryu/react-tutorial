@@ -1,10 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 export class CustomError extends Error {
   constructor(detail) {
     super('Custom Error 발생')
     this.detail = detail
   }
 }
+
+export const fetchUsers = createAsyncThunk('users/fetch', async () => {
+  const result = await fetch('/api/users')
+  if (!result.ok) {
+    throw new CustomError({ status: result.status, statusText: result.statusText })
+  }
+  return result.json()
+})
 
 const userSlice = createSlice({
   name: 'users',
@@ -14,21 +22,23 @@ const userSlice = createSlice({
     error: undefined,
     data: undefined,
   },
-  reducers: {
-    loading: (states, { payload, type }) => {
-      states.status = 'loading'
-    },
-    success: (states, { payload, type }) => {
-      states.status = 'succeeded'
-      states.data = payload
-    },
-    failed: (states, { payload, type }) => {
-      states.status = 'failed'
-      states.error = JSON.stringify(payload)
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(fetchUsers.pending, (state, { payload, type }) => {
+        state.status = 'loading'
+      })
+      .addCase(fetchUsers.fulfilled, (state, { payload, type }) => {
+        state.status = 'succeeded'
+        state.data = payload
+      })
+      .addCase(fetchUsers.rejected, (state, { payload, type }) => {
+        state.status = 'failed'
+        state.error = JSON.stringify(payload)
+      })
   },
 })
 
-export const { loading, success, failed } = userSlice.actions
+export const {} = userSlice.actions
 
 export default userSlice.reducer
