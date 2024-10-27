@@ -1,4 +1,4 @@
-import userReducer, { fetchUsers } from '@/features/users/slice'
+import userReducer from '@/features/users/slice'
 import { configureStore } from '@reduxjs/toolkit'
 
 const dispatchWithLog = (store) => (next) => (action) => {
