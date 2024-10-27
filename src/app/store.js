@@ -1,3 +1,4 @@
+import { apiSlice } from '@/features/api/slice'
 import userReducer from '@/features/users/slice'
 import { configureStore } from '@reduxjs/toolkit'
 
@@ -16,6 +17,7 @@ export const store = configureStore({
     // cart: cartSlice.reducer,
     // payment: paymentSlice.reducer,
     // account: accountSlice.reducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(dispatchWithLog),
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware).concat(dispatchWithLog),
 })
