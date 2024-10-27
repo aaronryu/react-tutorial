@@ -1,6 +1,7 @@
 import { ReduxProvider } from '@/providers/ReduxProvider'
-import { useGetUsersQuery, useLazyGetUsersQuery } from '@/features/api/slice'
+import { useGetUsersQuery, useLazyGetUsersQuery } from '@/features/api/user.slice'
 import './App.css'
+import { useGetCatsQuery } from '@/features/api/cat.slice'
 
 function UserTable() {
   // const { refetch, data: users, isLoading, isSuccess, isError, error } = useGetUsersQuery()
@@ -47,10 +48,24 @@ function UserTable() {
   )
 }
 
+function CatImages() {
+  const { refetch, data: cats, isLoading, isSuccess, isError, error } = useGetCatsQuery(2)
+
+  return (
+    <div>
+      <div>
+        <button onClick={refetch}>새로고침</button>
+      </div>
+      <div>{cats && cats.map((cat) => <img src={cat.url} width={200} height={200} />)}</div>
+    </div>
+  )
+}
+
 function App() {
   return (
     <ReduxProvider>
       <UserTable />
+      <CatImages />
     </ReduxProvider>
   )
 }

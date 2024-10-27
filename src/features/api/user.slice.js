@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-export const apiSlice = createApi({
-  reducerPath: 'api',
+export const userApiSlice = createApi({
+  reducerPath: 'user/api',
   baseQuery: fetchBaseQuery({ baseUrl: '/api' }),
   endpoints: (builder) => ({
     getUsers: builder.query({
@@ -10,4 +10,4 @@ export const apiSlice = createApi({
   }),
 })
 
-export const { useGetUsersQuery, useLazyGetUsersQuery } = apiSlice
+export const { useGetUsersQuery, useLazyGetUsersQuery } = userApiSlice
