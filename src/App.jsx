@@ -18,18 +18,21 @@ function App() {
   return (
     <>
       <h3 style={{ margin: 0 }}>유저 추가하기</h3>
-      <form className='form-wrapper' onSubmit={handleSubmit(send)}>
+      <form onSubmit={handleSubmit(send)}>
         <input
           className={clsx('input', errors?.username && 'error-border')}
           {...register('username', {
-            required: { value: true, message: '아이디를 입력해주세요' },
+            required: true,
             maxLength: {
               value: 10,
               message: '아이디는 10자 이상이 될 수 없습니다',
             },
           })}
         />
-        <div className={errors?.username ? 'error-text' : ''}>{errors?.username?.message}</div>
+        <div className={errors?.username ? 'error-text' : ''}>
+          {errors?.username?.type === 'required' && '아이디는 필수 입력항목 입니다'}
+          {errors?.username?.message}
+        </div>
         {/* <form> 요소 내 submit 이벤트를 trigger 하는 요소는 2가지 : <button type='submit'> (type 생략 가능) 과 <input type='submit'> */}
         <button type='button'>저장안됨</button>
         <button type='submit'>저장하기</button>
