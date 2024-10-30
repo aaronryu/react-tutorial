@@ -3,6 +3,7 @@ import { forwardRef, useRef, useState } from 'react'
 import '@/App.css'
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form'
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
 
 function UserTable({ isLoading, isSuccess, users = [] }) {
   return (
@@ -200,11 +201,15 @@ function SpecialtyInput({ register, error = undefined }) {
 }
 
 function App() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
-  const [users, setUsers] = useState()
-
-  function refetch() {}
+  const {
+    isLoading,
+    isSuccess,
+    data: users,
+    refetch,
+  } = useQuery({
+    queryKey: ['users'],
+    queryFn: () => fetch('/api/users').then((res) => res.json()),
+  })
 
   function create({ username, email, age, job, specialty }) {
     console.log('회원가입 정보', { username, email, age, job, specialty })
